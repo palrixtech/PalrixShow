@@ -629,3 +629,32 @@ body.showcase-body {
 .info-badge.badge-liked {
   background: #af52de; /* iOS Purple */
 }
+
+/* Color Variant Swatches */
+.variant-color-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  align-items: center;
+  pointer-events: auto; /* Required as info-overlay has pointer-events: none */
+}
+
+.color-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.color-swatch:hover {
+  transform: scale(1.15);
+}
+
+.color-swatch.active {
+  transform: scale(1.3);
+  border-color: #ffffff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.85);
+}

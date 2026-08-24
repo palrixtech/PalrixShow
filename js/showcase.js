@@ -112,7 +112,18 @@
    * Create a single product reel item markup and event listeners
    */
   function createReelItem(product, index) {
-    let dots = null;
+    // 0. Normalize variant data
+    if (!product.variants || product.variants.length === 0) {
+      product.variants = [
+        {
+          colorName: product.categoryName || "Default",
+          colorCode: "#ffffff",
+          images: product.media ? product.media.map(m => m.url) : []
+        }
+      ];
+    }
+
+    let activeVariantIndex = 0;
     const item = document.createElement("article");
     item.className = "reel-item";
     item.dataset.productId = product.id;
@@ -121,80 +132,45 @@
     // 1. Media Carousel Slider
     const slider = document.createElement("div");
     slider.className = "media-slider";
-
-    product.media.forEach((m, idx) => {
-      const slide = document.createElement("div");
-      slide.className = "media-slide";
-
-      // Background blur panel for aesthetic consistency
-      const blurBg = document.createElement("div");
-      blurBg.className = "media-blur-bg";
-      blurBg.style.backgroundImage = `url('${m.url}')`;
-
-      if (m.type === "video") {
-        const video = document.createElement("video");
-        video.className = "media-content";
-        video.src = m.url;
-        video.setAttribute("loop", "true");
-        video.setAttribute("playsinline", "true");
-        video.setAttribute("webkit-playsinline", "true");
-        video.muted = globalMuted;
-        
-        slide.append(blurBg, video);
-      } else {
-        const img = document.createElement("img");
-        img.className = "media-content";
-        img.src = m.url;
-        img.alt = product.name;
-        img.loading = index < 2 ? "eager" : "lazy";
-        
-        slide.append(blurBg, img);
-      }
-      
-      slider.append(slide);
-    });
-    
     item.append(slider);
 
     // 2. Add tap targets for easy horizontal navigation
-    if (product.media.length > 1) {
-      const tapLeft = document.createElement("div");
-      tapLeft.className = "tap-left";
-      const tapRight = document.createElement("div");
-      tapRight.className = "tap-right";
+    const tapLeft = document.createElement("div");
+    tapLeft.className = "tap-left";
+    const tapRight = document.createElement("div");
+    tapRight.className = "tap-right";
 
-      tapLeft.addEventListener("click", () => {
-        const width = slider.clientWidth;
-        slider.scrollBy({ left: -width, behavior: "smooth" });
+    tapLeft.addEventListener("click", () => {
+      const width = slider.clientWidth;
+      slider.scrollBy({ left: -width, behavior: "smooth" });
+    });
+
+    tapRight.addEventListener("click", () => {
+      const width = slider.clientWidth;
+      slider.scrollBy({ left: width, behavior: "smooth" });
+    });
+
+    item.append(tapLeft, tapRight);
+
+    // Dynamic horizontal dots container
+    const dotsContainer = document.createElement("div");
+    dotsContainer.className = "media-dots";
+
+    // Track scroll to update active dot
+    slider.addEventListener("scroll", () => {
+      const width = slider.clientWidth;
+      const activeIndex = Math.round(slider.scrollLeft / width);
+      const dotsList = dotsContainer.querySelectorAll(".media-dot");
+      dotsList.forEach((dot, idx) => {
+        dot.classList.toggle("active", idx === activeIndex);
       });
-
-      tapRight.addEventListener("click", () => {
-        const width = slider.clientWidth;
-        slider.scrollBy({ left: width, behavior: "smooth" });
-      });
-
-      item.append(tapLeft, tapRight);
-      
-      // Dots indicators
-      dots = createMediaDots(product.media.length, slider);
-
-      // Track scroll to update active dot
-      slider.addEventListener("scroll", () => {
-        const width = slider.clientWidth;
-        const activeIndex = Math.round(slider.scrollLeft / width);
-        const dotsList = dots.querySelectorAll(".media-dot");
-        dotsList.forEach((dot, idx) => {
-          dot.classList.toggle("active", idx === activeIndex);
-        });
-      });
-    }
+    });
 
     // 3. Double-tap to Like gesture on media slider
     let lastTapTime = 0;
     slider.addEventListener("click", (e) => {
       const currentTime = new Date().getTime();
       const tapDelay = currentTime - lastTapTime;
-      
       if (tapDelay < 300 && tapDelay > 0) {
         handleDoubleTapLike(product, item);
       }
@@ -202,7 +178,7 @@
     });
 
     // 4. Video mute button overlay if it has a video
-    const hasVideo = product.media.some(m => m.type === "video");
+    const hasVideo = product.media && product.media.some(m => m.type === "video");
     if (hasVideo) {
       const muteBtn = document.createElement("button");
       muteBtn.className = "video-mute-btn";
@@ -220,8 +196,26 @@
     // 5. Product info overlay
     const infoOverlay = document.createElement("div");
     infoOverlay.className = "info-overlay";
-    if (dots) {
-      infoOverlay.prepend(dots);
+    infoOverlay.prepend(dotsContainer); // Dots sit at top of overlay
+
+    // Color Swatches Bar
+    const colorBar = document.createElement("div");
+    colorBar.className = "variant-color-bar";
+    
+    product.variants.forEach((v, vIdx) => {
+      const swatch = document.createElement("span");
+      swatch.className = "color-swatch";
+      swatch.style.backgroundColor = v.colorCode;
+      swatch.title = v.colorName;
+      swatch.addEventListener("click", (e) => {
+        e.stopPropagation();
+        loadVariant(vIdx);
+      });
+      colorBar.append(swatch);
+    });
+
+    if (product.variants.length > 1) {
+      infoOverlay.append(colorBar);
     }
 
     // Floating Badge (e.g. New Arrival, Limited Stock)
@@ -327,7 +321,7 @@
       e.stopPropagation();
       const sliderEl = item.querySelector(".media-slider");
       const slideIndex = sliderEl ? Math.round(sliderEl.scrollLeft / sliderEl.clientWidth) : 0;
-      A.shareProduct(product, currentSeller, slideIndex, showToast);
+      A.shareProduct(product, currentSeller, activeVariantIndex, slideIndex, showToast);
       shareLabel.textContent = A.getSharesCount(product.id, product.baseShares);
     });
 
@@ -347,7 +341,7 @@
       e.stopPropagation();
       const sliderEl = item.querySelector(".media-slider");
       const slideIndex = sliderEl ? Math.round(sliderEl.scrollLeft / sliderEl.clientWidth) : 0;
-      A.openWhatsAppEnquiry(product, currentSeller, slideIndex);
+      A.openWhatsAppEnquiry(product, currentSeller, activeVariantIndex, slideIndex);
     });
 
     const waLabel = document.createElement("span");
@@ -365,7 +359,65 @@
     doubleTapHeart.innerHTML = '<i class="bi bi-heart-fill"></i>';
     item.append(doubleTapHeart);
 
+    // Load default variant (index 0)
+    loadVariant(0);
+
     return item;
+
+    /**
+     * Load images and setup layout for a specific variant index
+     */
+    function loadVariant(vIdx) {
+      activeVariantIndex = vIdx;
+      const variant = product.variants[vIdx];
+
+      // Update color swatches active styles
+      const swatches = colorBar.querySelectorAll(".color-swatch");
+      swatches.forEach((sw, sIdx) => {
+        sw.classList.toggle("active", sIdx === vIdx);
+      });
+
+      // Update slides inside slider
+      slider.innerHTML = "";
+      variant.images.forEach((imgUrl, sIdx) => {
+        const slide = document.createElement("div");
+        slide.className = "media-slide";
+
+        const blurBg = document.createElement("div");
+        blurBg.className = "media-blur-bg";
+        blurBg.style.backgroundImage = `url('${imgUrl}')`;
+
+        const img = document.createElement("img");
+        img.className = "media-content";
+        img.src = imgUrl;
+        img.alt = `${product.name} - ${variant.colorName}`;
+        img.loading = index < 2 && sIdx === 0 ? "eager" : "lazy";
+
+        slide.append(blurBg, img);
+        slider.append(slide);
+      });
+
+      // Update dots
+      dotsContainer.innerHTML = "";
+      if (variant.images.length > 1) {
+        dotsContainer.style.display = "flex";
+        for (let i = 0; i < variant.images.length; i++) {
+          const dot = document.createElement("span");
+          dot.className = `media-dot${i === 0 ? " active" : ""}`;
+          dot.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const width = slider.clientWidth;
+            slider.scrollTo({ left: i * width, behavior: "smooth" });
+          });
+          dotsContainer.append(dot);
+        }
+      } else {
+        dotsContainer.style.display = "none";
+      }
+
+      // Reset horizontal scroll
+      slider.scrollTo({ left: 0, behavior: "instant" });
+    }
   }
 
   /**
@@ -472,7 +524,8 @@
     if (hash && hash.startsWith("#product-")) {
       const parts = hash.replace("#product-", "").split("-");
       const pId = parts[0];
-      const slideIndex = parts[1] ? Number(parts[1]) : 0;
+      const variantIndex = parts[1] ? Number(parts[1]) : 0;
+      const slideIndex = parts[2] ? Number(parts[2]) : 0;
       
       const targetElement = document.querySelector(`[data-product-id="${pId}"]`);
       if (targetElement) {
@@ -480,13 +533,19 @@
         setTimeout(() => {
           targetElement.scrollIntoView({ behavior: "instant" });
           
+          // Trigger variant selection click
+          const swatches = targetElement.querySelectorAll(".color-swatch");
+          if (swatches && swatches[variantIndex]) {
+            swatches[variantIndex].click();
+          }
+          
           // Scroll the horizontal slider to the active slide
           const slider = targetElement.querySelector(".media-slider");
           if (slider) {
             setTimeout(() => {
               const width = slider.clientWidth;
               slider.scrollTo({ left: slideIndex * width, behavior: "instant" });
-            }, 100);
+            }, 150);
           }
         }, 100);
       }

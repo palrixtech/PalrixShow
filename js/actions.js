@@ -76,18 +76,18 @@
   }
 
   /**
-   * Generate sharing URL for a specific product and slide
+   * Generate sharing URL for a specific product, variant, and slide
    */
-  function getProductShareUrl(sellerSlug, productId, slideIndex = 0) {
+  function getProductShareUrl(sellerSlug, productId, variantIndex = 0, slideIndex = 0) {
     const base = window.location.origin + window.location.pathname;
-    return `${base}?seller=${encodeURIComponent(sellerSlug)}#product-${encodeURIComponent(productId)}-${slideIndex}`;
+    return `${base}?seller=${encodeURIComponent(sellerSlug)}#product-${encodeURIComponent(productId)}-${variantIndex}-${slideIndex}`;
   }
 
   /**
    * Share product using Web Share API or Clipboard Copy
    */
-  async function shareProduct(product, seller, slideIndex, onToast) {
-    const url = getProductShareUrl(seller.slug, product.id, slideIndex);
+  async function shareProduct(product, seller, variantIndex, slideIndex, onToast) {
+    const url = getProductShareUrl(seller.slug, product.id, variantIndex, slideIndex);
     const text = `Check out this ${product.name} from ${seller.name}!`;
 
     // Increment share count
@@ -118,7 +118,7 @@
   /**
    * Generate and open WhatsApp message URL
    */
-  function openWhatsAppEnquiry(product, seller, slideIndex) {
+  function openWhatsAppEnquiry(product, seller, variantIndex, slideIndex) {
     const phoneClean = String(seller.whatsappNumber || seller.phone).replace(/\D/g, "");
     
     let text = `Hi, I'm interested in ${product.name}`;
@@ -127,8 +127,8 @@
     }
     text += `. Is it available?`;
     
-    // Also append the share link for clarity so the seller knows exactly which product/color it is
-    const productUrl = getProductShareUrl(seller.slug, product.id, slideIndex);
+    // Also append the share link for clarity so the seller knows exactly which product/color/slide it is
+    const productUrl = getProductShareUrl(seller.slug, product.id, variantIndex, slideIndex);
     text += `\nLink: ${productUrl}`;
 
     const waUrl = `https://wa.me/${phoneClean}?text=${encodeURIComponent(text)}`;
