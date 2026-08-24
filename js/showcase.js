@@ -15,12 +15,15 @@
   const shareToast = document.getElementById("shareToast");
 
   let currentSeller = null;
-  let productsList = [];
+  let allProductsList = []; // stores all loaded products for current seller
+  let productsList = []; // currently filtered products list
   let totalProducts = 0;
   let activeVideo = null;
   let globalMuted = true; // start muted by default
   let activeReelItem = null;
   let activeReelIndex = 0;
+  let activeCategory = "all";
+  let videoObserver = null;
 
   /**
    * Helper to display a toast message
@@ -52,7 +55,7 @@
   }
 
   /**
-   * Render state screen for errors or not found
+   * Render state screen for errors or empty search
    */
   function renderStateScreen(title, description, buttonText, onAction) {
     feedContainer.innerHTML = "";
@@ -115,38 +118,30 @@
     item.dataset.productId = product.id;
     item.dataset.index = index;
 
-    // 1. Horizontal slider for media
+    // 1. Media Carousel Slider
     const slider = document.createElement("div");
     slider.className = "media-slider";
-    
-    product.media.forEach(m => {
+
+    product.media.forEach((m, idx) => {
       const slide = document.createElement("div");
       slide.className = "media-slide";
 
-      // Blurred background fallback
-      const blurBg = document.createElement("img");
-      blurBg.className = "media-blur-bg";
-      blurBg.alt = "";
-      
+      // Background blur panel for aesthetic consistency
+      const blurBg = document.createElement("div");
+      blurBg.className = "blur-bg";
+      blurBg.style.backgroundImage = `url('${m.url}')`;
+
       if (m.type === "video") {
-        // Use video thumbnail or a blank placeholder for blur if no thumbnail
-        blurBg.src = m.thumbnail || product.images?.[0] || "";
-        
         const video = document.createElement("video");
-        video.className = "media-content";
         video.src = m.url;
-        video.loop = true;
-        video.muted = globalMuted;
-        video.playsInline = true;
+        video.setAttribute("loop", "true");
+        video.setAttribute("playsinline", "true");
         video.setAttribute("webkit-playsinline", "true");
-        if (m.thumbnail) video.poster = m.thumbnail;
+        video.muted = globalMuted;
         
         slide.append(blurBg, video);
       } else {
-        blurBg.src = m.url;
-        
         const img = document.createElement("img");
-        img.className = "media-content";
         img.src = m.url;
         img.alt = product.name;
         img.loading = index < 2 ? "eager" : "lazy";
@@ -195,12 +190,10 @@
     // 3. Double-tap to Like gesture on media slider
     let lastTapTime = 0;
     slider.addEventListener("click", (e) => {
-      // Ignore click if clicking info overlay or action buttons (which stopPropagation)
       const currentTime = new Date().getTime();
       const tapDelay = currentTime - lastTapTime;
       
       if (tapDelay < 300 && tapDelay > 0) {
-        // Double tap triggered
         handleDoubleTapLike(product, item);
       }
       lastTapTime = currentTime;
@@ -227,6 +220,14 @@
     infoOverlay.className = "info-overlay";
     if (dots) {
       infoOverlay.prepend(dots);
+    }
+
+    // Floating Badge (e.g. New Arrival, Limited Stock)
+    if (product.badge) {
+      const badge = document.createElement("span");
+      badge.className = `info-badge ${product.badgeClass || 'badge-new'}`;
+      badge.textContent = product.badge;
+      infoOverlay.append(badge);
     }
 
     const category = document.createElement("div");
@@ -292,16 +293,17 @@
     likeBtn.innerHTML = isLiked ? '<i class="bi bi-heart-fill"></i>' : '<i class="bi bi-heart"></i>';
     if (isLiked) likeBtn.classList.add("btn-liked");
 
+    const likeLabel = document.createElement("span");
+    likeLabel.className = "action-label";
+    likeLabel.textContent = A.getLikesCount(product.id, product.baseLikes);
+
     likeBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       const likedState = A.toggleLikeProduct(product.id);
       likeBtn.classList.toggle("btn-liked", likedState);
       likeBtn.innerHTML = likedState ? '<i class="bi bi-heart-fill"></i>' : '<i class="bi bi-heart"></i>';
+      likeLabel.textContent = A.getLikesCount(product.id, product.baseLikes);
     });
-
-    const likeLabel = document.createElement("span");
-    likeLabel.className = "action-label";
-    likeLabel.textContent = "Like";
 
     likeItem.append(likeBtn, likeLabel);
 
@@ -315,16 +317,17 @@
     shareBtn.setAttribute("aria-label", `Share ${product.name}`);
     shareBtn.innerHTML = '<i class="bi bi-share-fill"></i>';
 
+    const shareLabel = document.createElement("span");
+    shareLabel.className = "action-label";
+    shareLabel.textContent = A.getSharesCount(product.id, product.baseShares);
+
     shareBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       const sliderEl = item.querySelector(".media-slider");
       const slideIndex = sliderEl ? Math.round(sliderEl.scrollLeft / sliderEl.clientWidth) : 0;
       A.shareProduct(product, currentSeller, slideIndex, showToast);
+      shareLabel.textContent = A.getSharesCount(product.id, product.baseShares);
     });
-
-    const shareLabel = document.createElement("span");
-    shareLabel.className = "action-label";
-    shareLabel.textContent = "Share";
 
     shareItem.append(shareBtn, shareLabel);
 
@@ -368,6 +371,7 @@
    */
   function handleDoubleTapLike(product, itemEl) {
     const likeBtn = itemEl.querySelector(".action-bar .action-btn");
+    const likeLabel = itemEl.querySelector(".action-bar .action-item:first-child .action-label");
     const isLiked = A.isProductLiked(product.id);
     
     // Only toggle to liked on double tap, don't unlike
@@ -375,6 +379,9 @@
       A.toggleLikeProduct(product.id);
       likeBtn.classList.add("btn-liked");
       likeBtn.innerHTML = '<i class="bi bi-heart-fill"></i>';
+      if (likeLabel) {
+        likeLabel.textContent = A.getLikesCount(product.id, product.baseLikes);
+      }
     }
 
     // Trigger visual center heart animation
@@ -408,13 +415,18 @@
    * Setup IntersectionObserver to play/pause video on active slide
    */
   function setupVideoObserver() {
+    // Disconnect old observer if exists
+    if (videoObserver) {
+      videoObserver.disconnect();
+    }
+
     const observerOptions = {
       root: feedContainer,
       rootMargin: "0px",
       threshold: 0.65 // Consider active when 65% is visible
     };
 
-    const observer = new IntersectionObserver((entries) => {
+    videoObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         const reel = entry.target;
         const video = reel.querySelector("video");
@@ -446,7 +458,7 @@
     }, observerOptions);
 
     document.querySelectorAll(".reel-item").forEach(item => {
-      observer.observe(item);
+      videoObserver.observe(item);
     });
   }
 
@@ -484,7 +496,6 @@
    */
   function setupKeyboardNavigation() {
     window.addEventListener("keydown", (e) => {
-      // Ignore keys if user is typing in form controls (none present currently, but good practice)
       if (["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName)) return;
 
       if (e.key === "ArrowDown" || e.key === "ArrowUp") {
@@ -521,6 +532,90 @@
   }
 
   /**
+   * Render filtered products list
+   */
+  function renderReels() {
+    feedContainer.innerHTML = "";
+    
+    if (productsList.length === 0) {
+      renderStateScreen(
+        "No Products",
+        "No items found in this category.",
+        "Show All",
+        () => { setActiveCategory("all"); }
+      );
+      totalProducts = 0;
+      productCounter.textContent = "0 / 0";
+      return;
+    }
+
+    productsList.forEach((product, idx) => {
+      const reelItem = createReelItem(product, idx);
+      feedContainer.append(reelItem);
+    });
+
+    totalProducts = productsList.length;
+    activeReelIndex = 0;
+    activeReelItem = feedContainer.querySelector(".reel-item");
+    productCounter.textContent = `1 / ${totalProducts}`;
+
+    // Setup Video Autoplay and Scroll Observers
+    setupVideoObserver();
+  }
+
+  /**
+   * Set active category filter and re-render feed
+   */
+  function setActiveCategory(category) {
+    activeCategory = category;
+    
+    // Update active tab styles
+    const categoryBar = document.getElementById("categoryBar");
+    if (categoryBar) {
+      const tabs = categoryBar.querySelectorAll(".category-tab");
+      tabs.forEach(tab => {
+        tab.classList.toggle("active", tab.dataset.filter === category);
+      });
+    }
+
+    // Filter products list
+    if (category === "all") {
+      productsList = [...allProductsList];
+    } else if (category === "new") {
+      productsList = allProductsList.filter(p => p.isNewArrival);
+    } else if (category === "stock") {
+      productsList = allProductsList.filter(p => p.isLimitedStock);
+    } else if (category === "sold") {
+      productsList = allProductsList.filter(p => p.isMostSold);
+    } else if (category === "liked") {
+      productsList = allProductsList.filter(p => p.isMostLiked);
+    }
+
+    // Re-render feed items
+    renderReels();
+
+    // Reset scroll position to top reel item
+    feedContainer.scrollTo({ top: 0, behavior: "instant" });
+  }
+
+  /**
+   * Set up event listeners for category tabs
+   */
+  function setupCategoryFilter() {
+    const categoryBar = document.getElementById("categoryBar");
+    if (!categoryBar) return;
+
+    const tabs = categoryBar.querySelectorAll(".category-tab");
+    tabs.forEach(tab => {
+      tab.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const filter = tab.dataset.filter;
+        setActiveCategory(filter);
+      });
+    });
+  }
+
+  /**
    * Initialize Showcase page
    */
   async function init() {
@@ -547,7 +642,8 @@
       document.title = `${currentSeller.name} — Product Showcase`;
 
       // 3. Load seller's products
-      productsList = await D.loadProducts(currentSeller.id);
+      allProductsList = await D.loadProducts(currentSeller.id);
+      productsList = [...allProductsList];
       totalProducts = productsList.length;
       
       if (totalProducts === 0) {
@@ -560,15 +656,15 @@
         return;
       }
 
-      // 4. Render Reels
-      feedContainer.innerHTML = "";
-      productsList.forEach((product, idx) => {
-        const reelItem = createReelItem(product, idx);
-        feedContainer.append(reelItem);
-      });
+      // 4. Show category bar and setup listeners
+      const categoryBar = document.getElementById("categoryBar");
+      if (categoryBar) {
+        categoryBar.style.display = "flex";
+        setupCategoryFilter();
+      }
 
-      // 5. Setup Observer for Video Autoplay and Navigation
-      setupVideoObserver();
+      // 5. Render filtered reels list
+      renderReels();
 
       // 6. Setup Keyboard Controls for arrow keys
       setupKeyboardNavigation();

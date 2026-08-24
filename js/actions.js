@@ -44,6 +44,38 @@
   }
 
   /**
+   * Get total likes count dynamically (base + state offset)
+   */
+  function getLikesCount(productId, baseLikes) {
+    const isLiked = isProductLiked(productId);
+    return baseLikes + (isLiked ? 1 : 0);
+  }
+
+  /**
+   * Get total shares count dynamically from local storage
+   */
+  function getSharesCount(productId, baseShares) {
+    try {
+      const sharesKey = `palrixshow_shares_${productId}`;
+      const extraShares = Number(localStorage.getItem(sharesKey)) || 0;
+      return baseShares + extraShares;
+    } catch (_) {
+      return baseShares;
+    }
+  }
+
+  /**
+   * Increment mock share count in local storage
+   */
+  function incrementShareCount(productId) {
+    try {
+      const sharesKey = `palrixshow_shares_${productId}`;
+      const current = Number(localStorage.getItem(sharesKey)) || 0;
+      localStorage.setItem(sharesKey, current + 1);
+    } catch (_) {}
+  }
+
+  /**
    * Generate sharing URL for a specific product and slide
    */
   function getProductShareUrl(sellerSlug, productId, slideIndex = 0) {
@@ -57,6 +89,9 @@
   async function shareProduct(product, seller, slideIndex, onToast) {
     const url = getProductShareUrl(seller.slug, product.id, slideIndex);
     const text = `Check out this ${product.name} from ${seller.name}!`;
+
+    // Increment share count
+    incrementShareCount(product.id);
 
     if (navigator.share) {
       try {
@@ -104,6 +139,9 @@
   window.ShowcaseActions = {
     isProductLiked,
     toggleLikeProduct,
+    getLikesCount,
+    getSharesCount,
+    incrementShareCount,
     shareProduct,
     openWhatsAppEnquiry
   };

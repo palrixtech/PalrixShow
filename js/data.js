@@ -30,11 +30,18 @@
       ],
       "attributes": {"Size": ["M", "L", "XL"], "Color": ["Navy Blue", "Slate Grey"], "Fabric": ["100% Piqué Cotton"]},
       "featured": true,
-      "newArrival": true,
       "createdDate": "2026-08-20",
       "sellerId": "palrix-fashion",
       "price": 899,
-      "originalPrice": 1299
+      "originalPrice": 1299,
+      "baseLikes": 142,
+      "baseShares": 34,
+      "isNewArrival": true,
+      "isLimitedStock": false,
+      "isMostSold": false,
+      "isMostLiked": true,
+      "badge": "Most Liked",
+      "badgeClass": "badge-liked"
     },
     {
       "id": 202,
@@ -48,11 +55,18 @@
       ],
       "attributes": {"Size": ["S", "M", "L", "XL"], "Color": ["White", "Black"], "Fabric": ["100% Combed Cotton"]},
       "featured": false,
-      "newArrival": true,
       "createdDate": "2026-08-22",
       "sellerId": "palrix-fashion",
       "price": 499,
-      "originalPrice": 799
+      "originalPrice": 799,
+      "baseLikes": 89,
+      "baseShares": 12,
+      "isNewArrival": true,
+      "isLimitedStock": true,
+      "isMostSold": false,
+      "isMostLiked": false,
+      "badge": "New Arrival",
+      "badgeClass": "badge-new"
     },
     {
       "id": 203,
@@ -66,11 +80,18 @@
       ],
       "attributes": {"Waist": ["30", "32", "34", "36"], "Wash": ["Indigo Blue", "Charcoal Grey"], "Fabric": ["98% Cotton, 2% Elastane"]},
       "featured": true,
-      "newArrival": true,
       "createdDate": "2026-08-21",
       "sellerId": "palrix-fashion",
       "price": 1499,
-      "originalPrice": 2299
+      "originalPrice": 2299,
+      "baseLikes": 256,
+      "baseShares": 87,
+      "isNewArrival": false,
+      "isLimitedStock": false,
+      "isMostSold": true,
+      "isMostLiked": false,
+      "badge": "Most Sold",
+      "badgeClass": "badge-sold"
     },
     {
       "id": 204,
@@ -84,11 +105,18 @@
       ],
       "attributes": {"Size": ["M", "L", "XL"], "Color": ["Khaki Brown", "Olive Green"], "Fabric": ["Twill Weave Cotton"]},
       "featured": true,
-      "newArrival": true,
       "createdDate": "2026-08-23",
       "sellerId": "palrix-fashion",
       "price": 1299,
-      "originalPrice": 1899
+      "originalPrice": 1899,
+      "baseLikes": 195,
+      "baseShares": 64,
+      "isNewArrival": false,
+      "isLimitedStock": true,
+      "isMostSold": false,
+      "isMostLiked": false,
+      "badge": "Limited Stock",
+      "badgeClass": "badge-stock"
     },
     {
       "id": 205,
@@ -103,11 +131,18 @@
       ],
       "attributes": {"Size": ["S", "M", "L", "XL"], "Color": ["Heather Grey", "Active Black"], "Fabric": ["Fleece Cotton Polyester"]},
       "featured": true,
-      "newArrival": false,
       "createdDate": "2026-08-24",
       "sellerId": "palrix-fashion",
       "price": 999,
-      "originalPrice": 1499
+      "originalPrice": 1499,
+      "baseLikes": 312,
+      "baseShares": 110,
+      "isNewArrival": true,
+      "isLimitedStock": false,
+      "isMostSold": true,
+      "isMostLiked": true,
+      "badge": "Most Sold",
+      "badgeClass": "badge-sold"
     }
   ];
 
