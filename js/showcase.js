@@ -82,13 +82,21 @@
   /**
    * Render horizontal media items dots indicators
    */
-  function createMediaDots(mediaLength) {
+  function createMediaDots(mediaLength, slider) {
     const dotsWrap = document.createElement("div");
     dotsWrap.className = "media-dots";
     
     for (let index = 0; index < mediaLength; index++) {
       const dot = document.createElement("span");
       dot.className = `media-dot${index === 0 ? " active" : ""}`;
+      
+      // Allow navigation by clicking on dots
+      dot.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const width = slider.clientWidth;
+        slider.scrollTo({ left: index * width, behavior: "smooth" });
+      });
+      
       dotsWrap.append(dot);
     }
     
@@ -168,7 +176,7 @@
       item.append(tapLeft, tapRight);
       
       // Dots indicators
-      const dots = createMediaDots(product.media.length);
+      const dots = createMediaDots(product.media.length, slider);
       item.append(dots);
 
       // Track scroll to update active dot
