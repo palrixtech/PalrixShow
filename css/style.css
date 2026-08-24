@@ -403,28 +403,26 @@ body.showcase-body {
 /* Horizontal media indicators */
 .media-dots {
   position: absolute;
-  bottom: 15px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 5px;
-  z-index: 10;
+  gap: 6px;
+  z-index: 20; /* Ensure visible above info-overlay (z-index 10) */
   pointer-events: none;
 }
 
 .media-dot {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.45);
   transition: all 0.2s ease;
 }
 
 .media-dot.active {
   background: #ffffff;
   transform: scale(1.25);
-  width: 8px;
-  border-radius: 3px;
 }
 
 /* Toast Messages */
