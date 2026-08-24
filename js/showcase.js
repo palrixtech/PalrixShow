@@ -109,6 +109,7 @@
    * Create a single product reel item markup and event listeners
    */
   function createReelItem(product, index) {
+    let dots = null;
     const item = document.createElement("article");
     item.className = "reel-item";
     item.dataset.productId = product.id;
@@ -178,8 +179,7 @@
       item.append(tapLeft, tapRight);
       
       // Dots indicators
-      const dots = createMediaDots(product.media.length, slider);
-      item.append(dots);
+      dots = createMediaDots(product.media.length, slider);
 
       // Track scroll to update active dot
       slider.addEventListener("scroll", () => {
@@ -225,6 +225,9 @@
     // 5. Product info overlay
     const infoOverlay = document.createElement("div");
     infoOverlay.className = "info-overlay";
+    if (dots) {
+      infoOverlay.prepend(dots);
+    }
 
     const category = document.createElement("div");
     category.className = "info-category";

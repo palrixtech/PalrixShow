@@ -402,13 +402,10 @@ body.showcase-body {
 
 /* Horizontal media indicators */
 .media-dots {
-  position: absolute;
-  top: 72px;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
   gap: 6px;
-  z-index: 20; /* Ensure visible above info-overlay (z-index 10) */
+  margin-bottom: 12px;
+  z-index: 20;
   pointer-events: none;
 }
 
