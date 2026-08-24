@@ -314,7 +314,9 @@
 
     shareBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      A.shareProduct(product, currentSeller, showToast);
+      const sliderEl = item.querySelector(".media-slider");
+      const slideIndex = sliderEl ? Math.round(sliderEl.scrollLeft / sliderEl.clientWidth) : 0;
+      A.shareProduct(product, currentSeller, slideIndex, showToast);
     });
 
     const shareLabel = document.createElement("span");
@@ -335,7 +337,9 @@
 
     waBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      A.openWhatsAppEnquiry(product, currentSeller);
+      const sliderEl = item.querySelector(".media-slider");
+      const slideIndex = sliderEl ? Math.round(sliderEl.scrollLeft / sliderEl.clientWidth) : 0;
+      A.openWhatsAppEnquiry(product, currentSeller, slideIndex);
     });
 
     const waLabel = document.createElement("span");
@@ -449,12 +453,24 @@
   function scrollToDeepLink() {
     const hash = window.location.hash;
     if (hash && hash.startsWith("#product-")) {
-      const pId = hash.replace("#product-", "");
+      const parts = hash.replace("#product-", "").split("-");
+      const pId = parts[0];
+      const slideIndex = parts[1] ? Number(parts[1]) : 0;
+      
       const targetElement = document.querySelector(`[data-product-id="${pId}"]`);
       if (targetElement) {
         // Wait briefly for rendering to settle
         setTimeout(() => {
           targetElement.scrollIntoView({ behavior: "instant" });
+          
+          // Scroll the horizontal slider to the active slide
+          const slider = targetElement.querySelector(".media-slider");
+          if (slider) {
+            setTimeout(() => {
+              const width = slider.clientWidth;
+              slider.scrollTo({ left: slideIndex * width, behavior: "instant" });
+            }, 100);
+          }
         }, 100);
       }
     }
