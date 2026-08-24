@@ -1,0 +1,1475 @@
+# Reels-Style Product Showcase — Complete UI/UX Redesign Prompt
+
+## IMPORTANT
+
+I have an existing project that was built for a product catalog/showcase concept.
+
+I will provide that existing project/codebase to you.
+
+Use the existing project as a **reference and source of existing data/content**, but redesign the UI/UX according to this prompt.
+
+### Reuse from the existing project where appropriate:
+
+* Seller/business information
+* Product information
+* Product images
+* Existing product data
+* Existing story/content/data
+* Existing assets
+* Existing routing structure if useful
+* Existing reusable business logic
+* Existing dependencies/components if they are still useful
+
+### Do NOT preserve the existing UI just because it already exists.
+
+The current UI does not match the intended product experience.
+
+The UI/UX needs to be redesigned from the ground up around the requirements below.
+
+---
+
+# 1. WHAT THIS PRODUCT IS
+
+This is NOT an Amazon-like or Flipkart-like e-commerce website.
+
+It is NOT a traditional product catalog with product cards, grids, filters, product-detail pages, cart, and checkout.
+
+The product should feel closer to:
+
+* Instagram Reels
+* TikTok
+* YouTube Shorts
+
+but specifically designed for **showcasing products**.
+
+The simplest way to understand the product is:
+
+> **One seller. One URL. Products displayed as a vertical Reels-style feed.**
+
+A seller gets one URL, for example:
+
+```text
+https://example.com/raj-fashion
+```
+
+When a customer opens this URL, they should immediately see the seller's products in a **full-screen vertical scrolling experience**.
+
+The customer can:
+
+* Scroll/swipe to the next product
+* Like a product
+* Share a product
+* Contact the seller about that specific product through WhatsApp
+
+The main objective is to help sellers stop sending dozens of product photos/videos individually through WhatsApp or continuously posting products on WhatsApp Status.
+
+Instead, they can simply share one link.
+
+Example:
+
+> New collection is here 👗
+> Check all products:
+> https://example.com/raj-fashion
+
+---
+
+# 2. CORE USER EXPERIENCE
+
+The experience should be:
+
+```text
+Seller
+   ↓
+Creates/has a product showcase
+   ↓
+Gets ONE URL
+   ↓
+Shares URL with customers
+   ↓
+Customer opens URL
+   ↓
+Product 1 fills the screen
+   ↓
+Customer swipes UP
+   ↓
+Product 2 fills the screen
+   ↓
+Customer swipes UP
+   ↓
+Product 3
+   ↓
+...
+```
+
+Every product should feel like a Reel.
+
+The customer should NOT feel like they are browsing an online shopping website.
+
+They should feel like they are discovering products through a social-media-style feed.
+
+---
+
+# 3. ONE SELLER = ONE URL
+
+The application should support the concept:
+
+**One seller → One public URL**
+
+Example URLs:
+
+```text
+/raj-fashion
+/mehta-jewellers
+/patel-shoes
+/home-decor
+```
+
+The seller URL should display that seller's products.
+
+The seller's identity should be visible, but the product media must remain the main focus.
+
+For example:
+
+```text
+Raj Fashion
+```
+
+can appear subtly at the top.
+
+Do not create a traditional website navigation system.
+
+---
+
+# 4. PRODUCT IS A MEDIA ITEM
+
+This is extremely important.
+
+A product is NOT limited to an image.
+
+A product can contain:
+
+* One image
+* Multiple images
+* One video
+* Multiple videos
+* A combination of images and videos
+
+Examples:
+
+### Product with one image
+
+```text
+Product A
+└── image.jpg
+```
+
+### Product with one video
+
+```text
+Product B
+└── video.mp4
+```
+
+### Product with multiple images
+
+```text
+Product C
+├── image-1.jpg
+├── image-2.jpg
+└── image-3.jpg
+```
+
+### Product with mixed media
+
+```text
+Product D
+├── video.mp4
+├── image-1.jpg
+└── image-2.jpg
+```
+
+The UI must support all of these.
+
+Do NOT design the application assuming every product has only one image.
+
+Think of every product as:
+
+> **A product + a collection of media items.**
+
+---
+
+# 5. TWO TYPES OF SWIPING
+
+There are two different navigation directions.
+
+## Vertical swipe = NEXT PRODUCT
+
+This is the primary interaction.
+
+Example:
+
+```text
+Product 1
+    ↓ swipe up
+Product 2
+    ↓ swipe up
+Product 3
+    ↓ swipe up
+Product 4
+```
+
+Each product should occupy approximately the entire viewport.
+
+---
+
+## Horizontal swipe = MEDIA WITHIN CURRENT PRODUCT
+
+If a product has multiple media items, the customer can move between them horizontally.
+
+Example:
+
+```text
+Product 1
+
+Image 1  →  Image 2  →  Video
+```
+
+Vertical swipe then moves to the next product.
+
+This distinction is important:
+
+> **Vertical = product navigation**
+
+> **Horizontal = media navigation inside the current product**
+
+If implementing horizontal swipe creates conflicts with vertical scrolling or poor mobile usability, provide a tap-based media navigation fallback.
+
+---
+
+# 6. FULL-SCREEN REELS-STYLE LAYOUT
+
+The main product feed should occupy the viewport.
+
+Each product should approximately use:
+
+```text
+100dvh
+```
+
+Use viewport-aware responsive sizing.
+
+The main feed should use vertical snapping.
+
+Conceptually:
+
+```css
+scroll-snap-type: y mandatory;
+```
+
+and each product:
+
+```css
+scroll-snap-align: start;
+```
+
+The user should naturally stop at one product at a time.
+
+The experience should feel smooth and intentional.
+
+---
+
+# 7. PRODUCT MEDIA IS THE HERO
+
+The media should dominate the screen.
+
+The product image/video should receive approximately **80–90% of the user's visual attention**.
+
+Do NOT place the product inside a traditional white card.
+
+Avoid this:
+
+```text
+┌──────────────────────┐
+│ Product Image        │
+│                      │
+├──────────────────────┤
+│ Product Name         │
+│ Price                │
+│ Description          │
+│ Add to Cart          │
+└──────────────────────┘
+```
+
+Instead, use a full-screen visual experience:
+
+```text
+┌─────────────────────────┐
+│                         │
+│                         │
+│       PRODUCT           │
+│       IMAGE / VIDEO     │
+│                         │
+│                         │
+│                         │
+│ Product Name       ♡   │
+│ ₹899                ↗   │
+│ Description         🟢  │
+└─────────────────────────┘
+```
+
+Product information should be overlaid on top of the media using gradients where necessary.
+
+---
+
+# 8. IMAGE PRODUCTS
+
+For image-based products:
+
+* Show the image prominently
+* Preserve the image's aspect ratio
+* Never stretch or distort the image
+* Support portrait images
+* Support square images
+* Support landscape images
+* Use appropriate `object-fit`
+* Use a visually pleasing background when the image does not fill the screen
+
+If the product image is portrait, it should feel natural on a mobile screen.
+
+If the image doesn't fill the entire screen, use a subtle blurred/background treatment rather than leaving an ugly empty area.
+
+---
+
+# 9. VIDEO PRODUCTS
+
+Videos should behave like Reels/Shorts.
+
+For a product with video:
+
+* Autoplay when the product becomes active/visible
+* Start muted by default
+* Loop automatically
+* Pause when the product leaves the viewport
+* Do not display a traditional large video player
+* Do not show unnecessary video controls
+* Preserve aspect ratio
+* Support portrait videos
+* Handle landscape videos gracefully
+* Show a mute/unmute control
+* Show a poster/thumbnail while the video is loading
+
+Example:
+
+```text
+┌─────────────────────────┐
+│                         │
+│                         │
+│       AUTOPLAY          │
+│       PRODUCT VIDEO     │
+│                         │
+│                         │
+│                    🔇   │
+│                         │
+│ Product Name        ♡  │
+│ ₹1,499              ↗  │
+│                     🟢 │
+└─────────────────────────┘
+```
+
+The video should feel like a Reel, not like an embedded YouTube player.
+
+---
+
+# 10. VIDEO PERFORMANCE
+
+Because products may contain videos, performance is extremely important.
+
+Do NOT load every video at once.
+
+Implement sensible media loading behavior:
+
+* Load the current product's video
+* Preload the next product when practical
+* Pause videos that leave the viewport
+* Avoid downloading unnecessary videos
+* Use poster images where possible
+* Optimize loading
+* Respect browser autoplay restrictions
+* Keep videos muted initially
+* Allow the user to unmute
+* Avoid memory-heavy behavior when many products exist
+
+Use `IntersectionObserver` or an equivalent approach if appropriate.
+
+The feed must remain smooth on mobile devices.
+
+---
+
+# 11. PRODUCT INFORMATION
+
+Keep product information minimal.
+
+The product media is the primary focus.
+
+Show:
+
+### Product name
+
+Example:
+
+**Premium Cotton Kurti**
+
+### Price
+
+Example:
+
+**₹899**
+
+Optionally:
+
+**₹1,199** → crossed out
+
+**25% OFF**
+
+### Short description
+
+Example:
+
+> Soft cotton kurti with floral print.
+
+Optional:
+
+* SKU/product code
+* Category
+* Short tags
+
+Do NOT show a huge specification section.
+
+Do NOT turn the reel into a product detail page.
+
+---
+
+# 12. PRODUCT INFORMATION POSITION
+
+Product information should appear near the bottom-left area.
+
+Example:
+
+```text
+Premium Cotton Kurti
+₹899
+
+Soft cotton kurti with floral print.
+
+K102
+```
+
+Use a subtle gradient overlay behind the text so it remains readable over images/videos.
+
+Do not put the information inside a large opaque card.
+
+---
+
+# 13. RIGHT-SIDE ACTION BAR
+
+Use a Reels-inspired vertical action bar on the right side.
+
+Actions should include:
+
+```text
+♡
+Like
+
+↗
+Share
+
+WhatsApp icon
+Enquire
+```
+
+The exact design should be original and should NOT copy Instagram's UI or branding exactly.
+
+The action buttons should be:
+
+* Large enough for touch
+* Easy to understand
+* Visually clean
+* Consistent throughout the feed
+
+---
+
+# 14. LIKE BUTTON
+
+Every product should have a Like button.
+
+Initial state:
+
+```text
+♡
+```
+
+After tapping:
+
+```text
+♥
+```
+
+Add a subtle animation when liked.
+
+For example:
+
+* Scale animation
+* Small heart burst
+* Color transition
+
+Keep it tasteful.
+
+For the current static version, likes do not need backend persistence.
+
+If the existing project already contains like counts, they may be displayed.
+
+Do not build a complete social networking backend.
+
+---
+
+# 15. SHARE BUTTON
+
+Every product must have a Share button.
+
+When the customer taps Share:
+
+Use the native Web Share API where available.
+
+Conceptually:
+
+```javascript
+navigator.share(...)
+```
+
+Share information should include:
+
+* Product name
+* Seller name
+* Product-specific URL
+
+Example:
+
+> Check out this Premium Cotton Kurti from Raj Fashion.
+
+If native sharing is unavailable:
+
+* Copy product URL
+* Show a small confirmation:
+  `Link copied`
+
+Do not create a huge complicated sharing interface.
+
+---
+
+# 16. PRODUCT-SPECIFIC SHARING
+
+Although one seller has one main URL, individual products should also be shareable.
+
+For example:
+
+Seller URL:
+
+```text
+example.com/raj-fashion
+```
+
+Specific product:
+
+```text
+example.com/raj-fashion#product-12
+```
+
+or use an equivalent clean routing approach.
+
+When someone opens a product-specific link, the feed should automatically position itself on that product.
+
+This is important because a customer may want to share:
+
+> “Look at this particular saree.”
+
+rather than sending the entire catalog.
+
+---
+
+# 17. WHATSAPP INQUIRY — VERY IMPORTANT
+
+Every product must have a WhatsApp enquiry action.
+
+This is one of the primary purposes of the product.
+
+The customer should be able to tap:
+
+**Enquire on WhatsApp**
+
+and WhatsApp should open with the seller's number as the recipient.
+
+The seller's WhatsApp number must come from seller data.
+
+DO NOT hardcode the seller's number into the UI.
+
+---
+
+# 18. WHATSAPP MESSAGE
+
+The WhatsApp message should be automatically generated based on the specific product.
+
+Example seller:
+
+```text
+Raj Fashion
++91 98765 43210
+```
+
+Example product:
+
+```text
+Designer Silk Saree
+SKU: RS-204
+```
+
+Generated message:
+
+```text
+Hi, I'm interested in Designer Silk Saree (RS-204). Is it available?
+```
+
+If SKU is unavailable:
+
+```text
+Hi, I'm interested in Designer Silk Saree. Is it available?
+```
+
+The customer should only need to press Send in WhatsApp.
+
+The WhatsApp URL should conceptually be:
+
+```text
+https://wa.me/{SELLER_PHONE}?text={ENCODED_MESSAGE}
+```
+
+Use proper URL encoding.
+
+---
+
+# 19. WHATSAPP BUTTON
+
+The WhatsApp action should be visually obvious.
+
+Use an appropriate WhatsApp icon.
+
+Possible UI:
+
+```text
+💬 Enquire on WhatsApp
+```
+
+or a compact action:
+
+```text
+🟢
+```
+
+with an accessible label.
+
+The button must be easy to tap on mobile.
+
+Do NOT label it:
+
+**Buy Now**
+
+because this is not an e-commerce checkout.
+
+Use:
+
+* Enquire on WhatsApp
+* Ask on WhatsApp
+* WhatsApp Seller
+
+Prefer:
+
+**Enquire on WhatsApp**
+
+---
+
+# 20. SELLER INFORMATION
+
+Show seller identity subtly.
+
+For example:
+
+```text
+Raj Fashion
+```
+
+Optionally:
+
+```text
+Raj Fashion
+Surat, Gujarat
+```
+
+Optional seller logo/avatar.
+
+The seller information should NOT dominate the screen.
+
+The product media remains the hero.
+
+---
+
+# 21. TOP BAR
+
+Keep the top navigation extremely minimal.
+
+Possible layout:
+
+```text
+[Logo] Raj Fashion
+```
+
+or:
+
+```text
+← Raj Fashion
+```
+
+Do not create traditional navigation such as:
+
+```text
+Home | Products | Categories | About | Contact
+```
+
+The feed itself is the primary experience.
+
+---
+
+# 22. MEDIA INDICATORS
+
+If a product contains multiple images/videos, show a subtle media indicator.
+
+Example:
+
+```text
+● ○ ○
+```
+
+This means:
+
+* Media 1 active
+* Media 2 available
+* Media 3 available
+
+The indicator should be subtle.
+
+Do not clutter the interface.
+
+---
+
+# 23. PRODUCT POSITION INDICATOR
+
+Optionally show:
+
+```text
+1 / 20
+```
+
+or another subtle indicator.
+
+This lets the user understand how many products are available.
+
+Do not make this a dominant element.
+
+---
+
+# 24. MOBILE-FIRST DESIGN
+
+Mobile is the PRIMARY target.
+
+Design the experience first for:
+
+* 360px
+* 375px
+* 390px
+* 414px
+
+Then adapt to:
+
+* Tablet
+* Desktop
+
+The website must feel natural on a smartphone.
+
+Pay attention to:
+
+* Safe areas
+* Notches
+* Browser address bars
+* Mobile browser bottom controls
+* Touch targets
+* Vertical scrolling
+* Video playback
+* Performance
+
+Use `100dvh` rather than relying only on `100vh` where appropriate.
+
+---
+
+# 25. DESKTOP EXPERIENCE
+
+Desktop should still maintain the Reels-style experience.
+
+Do NOT convert the desktop version into an e-commerce grid.
+
+Instead, show a focused vertical feed in the center.
+
+For example:
+
+```text
+┌───────────────────────────────────────────┐
+│                                           │
+│              ┌─────────────┐              │
+│              │             │              │
+│              │   PRODUCT   │              │
+│              │   IMAGE /   │              │
+│              │   VIDEO     │              │
+│              │             │              │
+│              │        ♡    │              │
+│              │        ↗    │              │
+│              │        🟢   │              │
+│              └─────────────┘              │
+│                                           │
+└───────────────────────────────────────────┘
+```
+
+Use a subtle background around the feed.
+
+The desktop UI should still feel like a product Reel viewer.
+
+---
+
+# 26. RESPONSIVE BEHAVIOR
+
+The design must adapt naturally to:
+
+* Mobile
+* Tablet
+* Laptop
+* Desktop
+* Large desktop monitors
+
+Do not simply stretch the mobile UI.
+
+Maintain:
+
+* Proper media proportions
+* Comfortable action-button placement
+* Readable text
+* Safe spacing
+* Correct video sizing
+
+---
+
+# 27. LANDING PAGE
+
+If the existing project has a landing/marketing page, redesign it to explain the product clearly.
+
+The first impression should immediately communicate the problem and solution.
+
+## Hero
+
+Suggested messaging:
+
+**Stop sending product photos one by one.**
+
+Create one beautiful link and let customers scroll through your products.
+
+Primary CTA:
+
+**View Demo**
+
+Secondary CTA:
+
+**Create Your Catalog**
+
+The exact copy can be improved if necessary, but the concept must remain.
+
+---
+
+# 28. PROBLEM SECTION
+
+Explain the current seller behavior.
+
+Example:
+
+```text
+Seller takes product photo
+        ↓
+Sends it on WhatsApp
+        ↓
+Sends another photo
+        ↓
+Sends another photo
+        ↓
+Customer gets dozens of messages
+```
+
+Then show the new experience:
+
+```text
+Create product showcase
+        ↓
+Get one link
+        ↓
+Share link
+        ↓
+Customer scrolls products
+        ↓
+Customer enquires
+```
+
+The landing page should make this difference immediately obvious.
+
+---
+
+# 29. DEMO IS IMPORTANT
+
+The landing page should provide a working demo.
+
+For example:
+
+```text
+/demo
+```
+
+or:
+
+```text
+/demo/raj-fashion
+```
+
+The demo should contain realistic product data from the existing project.
+
+The user should be able to actually:
+
+* Scroll through products
+* See images
+* See videos if available
+* Like products
+* Share products
+* Open WhatsApp
+* Navigate between media
+* Experience the complete flow
+
+Do NOT rely only on screenshots or static mockups.
+
+The interactive demo is the best way to communicate the product.
+
+---
+
+# 30. DATA STRUCTURE
+
+Reuse the existing project's data structure if it is already suitable.
+
+Conceptually, the data should support:
+
+```javascript
+seller = {
+    id,
+    name,
+    slug,
+    logo,
+    phone,
+    whatsappNumber,
+    description,
+    location
+}
+```
+
+Product:
+
+```javascript
+product = {
+    id,
+    name,
+    price,
+    originalPrice,
+    description,
+    sku,
+    category,
+    media,
+    sellerId
+}
+```
+
+Media:
+
+```javascript
+media = {
+    type: "image" | "video",
+    url,
+    thumbnail
+}
+```
+
+Example:
+
+```javascript
+{
+    id: "p001",
+    name: "Designer Saree",
+    price: 1499,
+    description: "Beautiful designer saree",
+    sku: "RS-204",
+    media: [
+        {
+            type: "video",
+            url: "/products/saree.mp4",
+            thumbnail: "/products/saree-thumb.jpg"
+        },
+        {
+            type: "image",
+            url: "/products/saree-front.jpg"
+        }
+    ]
+}
+```
+
+If the existing project uses a different structure, do not blindly replace it.
+
+Adapt the existing data model if possible.
+
+---
+
+# 31. STATIC MVP
+
+This version is currently a STATIC WEBSITE.
+
+Do not introduce unnecessary backend infrastructure.
+
+Use the existing:
+
+* Static data
+* JSON
+* Local assets
+* Existing data files
+* Existing project architecture
+
+However, keep the code structured so that the static data can later be replaced by an API.
+
+Conceptually:
+
+```text
+UI
+ ↓
+Data provider
+ ↓
+Static JSON now
+ ↓
+API/database later
+```
+
+Do not tightly couple UI components to hardcoded content.
+
+---
+
+# 32. FUTURE DYNAMIC VERSION
+
+The current implementation does not need to build these features.
+
+But the architecture should not prevent future support for:
+
+* Seller registration
+* Seller dashboard
+* Product creation
+* Product editing
+* Product deletion
+* Image uploads
+* Video uploads
+* Multiple media per product
+* Seller WhatsApp number
+* Catalog customization
+* Product analytics
+* View counts
+* Like counts
+* Product sharing analytics
+* Multiple sellers
+* Dynamic seller URLs
+* Product-specific URLs
+* QR codes
+* Custom domains
+
+For now, only build the static showcase experience.
+
+---
+
+# 33. DO NOT BUILD E-COMMERCE FEATURES
+
+This is very important.
+
+Do NOT add:
+
+* Shopping cart
+* Checkout
+* Payment gateway
+* Order management
+* Customer login
+* Customer registration
+* Product reviews
+* Wishlist pages
+* Product comparison
+* Complex product filters
+* Amazon-style specifications
+* Large product-detail pages
+* Buy Now button
+
+The intended customer journey is:
+
+```text
+DISCOVER
+   ↓
+LIKE
+   ↓
+SHARE
+   ↓
+ENQUIRE ON WHATSAPP
+```
+
+Not:
+
+```text
+DISCOVER
+   ↓
+ADD TO CART
+   ↓
+CHECKOUT
+   ↓
+PAYMENT
+```
+
+---
+
+# 34. VISUAL STYLE
+
+The visual design should be:
+
+* Modern
+* Premium
+* Minimal
+* Social-media inspired
+* Image/video-first
+* Mobile-first
+* Fast
+* Clean
+* Immersive
+
+Use:
+
+* Dark/neutral backgrounds
+* White primary text
+* Subtle gray secondary text
+* High-quality typography
+* Soft gradients
+* Rounded controls where appropriate
+* Minimal UI elements
+
+Avoid:
+
+* Excessive borders
+* Large white cards
+* Heavy shadows
+* Dense text
+* Traditional e-commerce styling
+* Too many menus
+* Too many buttons
+
+---
+
+# 35. WHATSAPP COLOR
+
+WhatsApp green may be used for the WhatsApp action.
+
+However, do not make the entire application green.
+
+WhatsApp should be recognizable as an action, while the product application should have its own visual identity.
+
+---
+
+# 36. ANIMATIONS
+
+Use subtle, high-quality animations.
+
+Examples:
+
+### Like
+
+Heart scales slightly and changes color.
+
+### Share
+
+Button gives subtle interaction feedback.
+
+### WhatsApp
+
+Button gives subtle tap feedback.
+
+### Media transition
+
+Smooth horizontal transition.
+
+### Product transition
+
+Natural vertical snap.
+
+### Video
+
+Smooth autoplay/pause behavior.
+
+Avoid excessive animation.
+
+Performance and usability are more important.
+
+---
+
+# 37. ACCESSIBILITY
+
+All interactive elements must have accessible labels.
+
+Examples:
+
+```text
+Like Premium Cotton Kurti
+Share Premium Cotton Kurti
+Enquire about Premium Cotton Kurti on WhatsApp
+Mute video
+Unmute video
+Next media
+Previous media
+```
+
+Maintain good color contrast.
+
+Provide appropriate alt text for images.
+
+Respect reduced-motion preferences where practical.
+
+---
+
+# 38. PERFORMANCE
+
+This is an image/video-heavy website.
+
+Performance is extremely important.
+
+Pay attention to:
+
+* Image optimization
+* Video optimization
+* Lazy loading
+* Preloading only necessary media
+* Avoiding unnecessary JavaScript
+* Avoiding layout shifts
+* Smooth scrolling
+* Mobile performance
+* Memory usage
+* Video lifecycle management
+
+Do not load 50 full-resolution videos simultaneously.
+
+---
+
+# 39. CODE QUALITY
+
+Keep the implementation clean and maintainable.
+
+Prefer reusable components such as:
+
+```text
+SellerHeader
+ProductFeed
+ProductReel
+ProductMedia
+ImageMedia
+VideoMedia
+ProductInfo
+ActionBar
+LikeButton
+ShareButton
+WhatsAppButton
+MediaIndicator
+```
+
+Do not create one huge component containing the entire application.
+
+Separate:
+
+* Data
+* UI
+* Media handling
+* Interaction logic
+* WhatsApp URL generation
+* Sharing logic
+
+---
+
+# 40. IMPORTANT IMPLEMENTATION RULE
+
+Before changing anything:
+
+1. Inspect the existing project.
+2. Understand its framework.
+3. Understand the existing routes.
+4. Understand the existing data.
+5. Understand the existing seller/product structure.
+6. Identify reusable assets.
+7. Identify reusable components.
+8. Identify existing functionality that can safely be retained.
+
+Then redesign the UI.
+
+Do not unnecessarily rewrite the entire project if useful functionality already exists.
+
+But do not allow the old UI structure to dictate the new UX.
+
+---
+
+# 41. FINAL USER FLOW
+
+The final experience should be:
+
+```text
+SELLER
+  │
+  │ shares one URL
+  ▼
+CUSTOMER
+  │
+  ▼
+SELLER'S REEL-STYLE PRODUCT FEED
+  │
+  ├── Product 1
+  │      ├── Image / Video
+  │      ├── Like
+  │      ├── Share
+  │      └── WhatsApp Enquiry
+  │
+  ├── Product 2
+  │      ├── Image / Video
+  │      ├── Like
+  │      ├── Share
+  │      └── WhatsApp Enquiry
+  │
+  ├── Product 3
+  │      ├── Image / Video
+  │      ├── Like
+  │      ├── Share
+  │      └── WhatsApp Enquiry
+  │
+  └── ...
+```
+
+If a product has multiple media:
+
+```text
+Product
+   │
+   ├── Image
+   ├── Image
+   └── Video
+
+Horizontal → media
+Vertical → next product
+```
+
+---
+
+# 42. MOST IMPORTANT DESIGN PRINCIPLE
+
+Always remember:
+
+> **This is NOT an online shopping website.**
+
+It is:
+
+> **A social-media-style product showcase.**
+
+Think:
+
+**Reels experience + Product discovery + WhatsApp enquiry**
+
+The customer should be able to open one link and immediately start scrolling through products.
+
+The product media should be the hero.
+
+The UI should stay out of the way.
+
+The three most important actions are:
+
+**❤️ Like**
+
+**↗ Share**
+
+**💬 Enquire on WhatsApp**
+
+---
+
+# 43. ACCEPTANCE CRITERIA
+
+The implementation will be considered successful only if:
+
+* [ ] One seller has one public URL.
+* [ ] Opening the URL immediately shows the seller's product feed.
+* [ ] The feed is full-screen and vertically scrollable.
+* [ ] One product occupies approximately one viewport.
+* [ ] Vertical swipe moves to the next product.
+* [ ] Products can contain images.
+* [ ] Products can contain videos.
+* [ ] Products can contain multiple images.
+* [ ] Products can contain multiple videos.
+* [ ] Products can contain mixed images/videos.
+* [ ] Horizontal navigation can move between media within the same product where appropriate.
+* [ ] Vertical navigation always moves between products.
+* [ ] Images preserve their aspect ratio.
+* [ ] Videos autoplay when the product becomes active.
+* [ ] Videos are muted by default.
+* [ ] Videos pause when they leave the active viewport.
+* [ ] Users can mute/unmute videos.
+* [ ] Product name is visible.
+* [ ] Product price is visible.
+* [ ] Short product description can be visible.
+* [ ] Like button works.
+* [ ] Share button works.
+* [ ] Product-specific sharing is supported.
+* [ ] WhatsApp button is available for every product.
+* [ ] WhatsApp opens with the seller's number as recipient.
+* [ ] WhatsApp message contains the relevant product name.
+* [ ] SKU is included when available.
+* [ ] No shopping cart is present.
+* [ ] No checkout is present.
+* [ ] No traditional e-commerce product grid is used as the primary interface.
+* [ ] Mobile experience is excellent.
+* [ ] Desktop experience maintains the Reels-style concept.
+* [ ] Existing project data and assets are reused where appropriate.
+* [ ] Existing business logic is reused where useful.
+* [ ] The UI is substantially redesigned from the old implementation.
+* [ ] The application is fast and smooth.
+* [ ] The code is structured for future API/backend integration.
+
+---
+
+# 44. FINAL GOAL
+
+The finished product should make a customer think:
+
+> “Oh, this is like scrolling through Reels, but every Reel is a product.”
+
+They should be able to:
+
+**Open link → Scroll → Discover → Like → Share → WhatsApp the seller**
+
+with almost no friction.
+
+The product should feel **simple, visual, addictive to browse, and extremely easy for a seller to share.**
