@@ -595,6 +595,10 @@ body.showcase-body {
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
+.category-bar > *:last-child {
+  margin-right: 16px; /* Ensure spacing on right end of scroll */
+}
+
 /* Floating Badges inside Overlay */
 .info-badge {
   display: inline-block;

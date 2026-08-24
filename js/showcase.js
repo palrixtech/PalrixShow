@@ -576,7 +576,11 @@
     if (categoryBar) {
       const tabs = categoryBar.querySelectorAll(".category-tab");
       tabs.forEach(tab => {
-        tab.classList.toggle("active", tab.dataset.filter === category);
+        const isActive = tab.dataset.filter === category;
+        tab.classList.toggle("active", isActive);
+        if (isActive) {
+          tab.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        }
       });
     }
 
