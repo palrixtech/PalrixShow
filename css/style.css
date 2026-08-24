@@ -403,7 +403,7 @@ body.showcase-body {
 /* Horizontal media indicators */
 .media-dots {
   position: absolute;
-  bottom: 20px;
+  top: 72px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
