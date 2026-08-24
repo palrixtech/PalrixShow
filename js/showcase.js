@@ -48,7 +48,7 @@
       }
     }
     
-    return seller || "raj-fashion"; // default
+    return seller || "palrix-fashion"; // default
   }
 
   /**
@@ -516,8 +516,8 @@
         renderStateScreen(
           "Seller Not Found",
           `The seller link "${slug}" does not exist in our directory.`,
-          "Browse Other Sellers",
-          () => { window.location.href = "index.html#sellers"; }
+          "Load Default Seller",
+          () => { window.location.href = "index.html"; }
         );
         return;
       }

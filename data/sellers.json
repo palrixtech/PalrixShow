@@ -1,22 +1,12 @@
 [
   {
-    "id": "raj-fashion",
-    "name": "Raj Fashion",
-    "slug": "raj-fashion",
-    "logo": "images/raj-logo.png",
-    "phone": "+91 98765 43210",
-    "whatsappNumber": "919876543210",
-    "description": "Premium Ladies Wear, Kurtis & Sarees in Surat",
-    "location": "Surat, Gujarat"
-  },
-  {
-    "id": "mehta-jewellers",
-    "name": "Mehta Jewellers",
-    "slug": "mehta-jewellers",
-    "logo": "images/mehta-logo.png",
-    "phone": "+91 99999 88888",
-    "whatsappNumber": "919999988888",
-    "description": "Exquisite Gold, Diamond & Polki Jewellery",
-    "location": "Mumbai, Maharashtra"
+    "id": "palrix-fashion",
+    "name": "Palrix Fashion",
+    "slug": "palrix-fashion",
+    "logo": "PF",
+    "phone": "+91 84900 21341",
+    "whatsappNumber": "918490021341",
+    "description": "Premium Men's Wear Collection",
+    "location": "Surat, Gujarat, India"
   }
 ]
