@@ -547,10 +547,14 @@ body.showcase-body {
   top: 60px;
   left: 0;
   right: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   height: 48px;
   display: flex;
   gap: 8px;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* Momentum scroll for iOS */
   scrollbar-width: none; /* Hide scrollbar for Firefox */
   align-items: center;
   padding: 0 16px;
@@ -577,6 +581,7 @@ body.showcase-body {
   cursor: pointer;
   transition: all 0.2s ease;
   pointer-events: auto;
+  flex-shrink: 0; /* Prevent pill squashing */
 }
 
 .category-tab:active {

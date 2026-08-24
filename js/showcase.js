@@ -128,11 +128,12 @@
 
       // Background blur panel for aesthetic consistency
       const blurBg = document.createElement("div");
-      blurBg.className = "blur-bg";
+      blurBg.className = "media-blur-bg";
       blurBg.style.backgroundImage = `url('${m.url}')`;
 
       if (m.type === "video") {
         const video = document.createElement("video");
+        video.className = "media-content";
         video.src = m.url;
         video.setAttribute("loop", "true");
         video.setAttribute("playsinline", "true");
@@ -142,6 +143,7 @@
         slide.append(blurBg, video);
       } else {
         const img = document.createElement("img");
+        img.className = "media-content";
         img.src = m.url;
         img.alt = product.name;
         img.loading = index < 2 ? "eager" : "lazy";
