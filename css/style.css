@@ -260,7 +260,7 @@ body.showcase-body {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 100px 72px 24px 16px; /* Right padding cleared for action bar */
+  padding: 80px 0 24px 0; /* No side padding on the main wrapper */
   background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0) 100%);
   z-index: 10;
   color: #fff;
@@ -269,6 +269,15 @@ body.showcase-body {
 
 .info-overlay * {
   pointer-events: auto;
+}
+
+.info-category,
+.info-title,
+.info-price-row,
+.info-description,
+.info-sku {
+  padding-left: 16px;
+  padding-right: 72px; /* Right padding cleared for action bar */
 }
 
 .info-category {
@@ -402,13 +411,10 @@ body.showcase-body {
 
 /* Horizontal media indicators */
 .media-dots {
-  position: absolute;
-  top: 40px;
-  left: 0;
-  right: 0;
   display: flex;
   justify-content: center;
   gap: 6px;
+  margin-bottom: 16px;
   z-index: 20;
   pointer-events: none;
 }
