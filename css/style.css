@@ -403,6 +403,7 @@ body.showcase-body {
 /* Horizontal media indicators */
 .media-dots {
   display: flex;
+  justify-content: center;
   gap: 6px;
   margin-bottom: 12px;
   z-index: 20;
