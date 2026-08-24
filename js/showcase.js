@@ -19,6 +19,8 @@
   let totalProducts = 0;
   let activeVideo = null;
   let globalMuted = true; // start muted by default
+  let activeReelItem = null;
+  let activeReelIndex = 0;
 
   /**
    * Helper to display a toast message
@@ -415,6 +417,9 @@
           const index = Number(reel.dataset.index);
           productCounter.textContent = `${index + 1} / ${totalProducts}`;
           
+          activeReelItem = reel;
+          activeReelIndex = index;
+          
           if (video) {
             activeVideo = video;
             video.muted = globalMuted;
@@ -453,6 +458,47 @@
         }, 100);
       }
     }
+  }
+
+  /**
+   * Setup keyboard controls for desktop arrow key navigation
+   */
+  function setupKeyboardNavigation() {
+    window.addEventListener("keydown", (e) => {
+      // Ignore keys if user is typing in form controls (none present currently, but good practice)
+      if (["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName)) return;
+
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault(); // Stop standard browser scrolling
+        
+        let nextIndex = activeReelIndex;
+        if (e.key === "ArrowDown") {
+          nextIndex = Math.min(totalProducts - 1, activeReelIndex + 1);
+        } else {
+          nextIndex = Math.max(0, activeReelIndex - 1);
+        }
+        
+        if (nextIndex !== activeReelIndex) {
+          const targetReel = document.querySelector(`[data-index="${nextIndex}"]`);
+          if (targetReel) {
+            targetReel.scrollIntoView({ behavior: "smooth" });
+          }
+        }
+      } else if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        if (!activeReelItem) return;
+        
+        const slider = activeReelItem.querySelector(".media-slider");
+        if (slider) {
+          e.preventDefault(); // Prevent standard horizontal page scrolling if any
+          const width = slider.clientWidth;
+          if (e.key === "ArrowRight") {
+            slider.scrollTo({ left: slider.scrollLeft + width, behavior: "smooth" });
+          } else {
+            slider.scrollTo({ left: slider.scrollLeft - width, behavior: "smooth" });
+          }
+        }
+      }
+    });
   }
 
   /**
@@ -505,7 +551,10 @@
       // 5. Setup Observer for Video Autoplay and Navigation
       setupVideoObserver();
 
-      // 6. Deep linking
+      // 6. Setup Keyboard Controls for arrow keys
+      setupKeyboardNavigation();
+
+      // 7. Deep linking
       scrollToDeepLink();
       window.addEventListener("hashchange", scrollToDeepLink);
 
