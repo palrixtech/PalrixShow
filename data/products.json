@@ -1,15 +1,14 @@
 [
   {
     "id": 201,
-    "productCode": "POLO-001",
-    "name": "Premium Pique Polo Shirt",
+    "productCode": "POLO-NVY",
+    "name": "Premium Pique Polo Shirt (Navy)",
     "categoryName": "Polo Shirts",
-    "description": "A refined men's polo shirt cut for a clean fit from breathable piqué cotton. Finished with a classic ribbed collar and two-button placket.",
+    "description": "A refined men's polo shirt cut for a clean fit from breathable navy piqué cotton. Finished with a classic ribbed collar and two-button placket.",
     "images": [
-      "images/products/polo_navy.jpg",
-      "images/products/polo_grey.jpg"
+      "images/products/polo_navy.jpg"
     ],
-    "attributes": {"Size": ["M", "L", "XL"], "Color": ["Navy Blue", "Slate Grey"], "Fabric": ["100% Piqué Cotton"]},
+    "attributes": {"Size": ["M", "L", "XL"], "Color": ["Navy Blue"], "Fabric": ["100% Piqué Cotton"]},
     "featured": true,
     "newArrival": true,
     "createdDate": "2026-08-20",
@@ -19,16 +18,34 @@
   },
   {
     "id": 202,
-    "productCode": "TEE-001",
-    "name": "Minimalist Graphic Tee",
+    "productCode": "POLO-GRY",
+    "name": "Premium Pique Polo Shirt (Grey)",
+    "categoryName": "Polo Shirts",
+    "description": "A refined men's polo shirt cut for a clean fit from breathable grey piqué cotton. Finished with a classic ribbed collar and two-button placket.",
+    "images": [
+      "images/products/polo_grey.jpg",
+      "images/products/polo_grey.jpg"
+    ],
+    "attributes": {"Size": ["M", "L", "XL"], "Color": ["Slate Grey"], "Fabric": ["100% Piqué Cotton"]},
+    "featured": true,
+    "newArrival": true,
+    "createdDate": "2026-08-20",
+    "sellerId": "palrix-fashion",
+    "price": 899,
+    "originalPrice": 1299
+  },
+  {
+    "id": 203,
+    "productCode": "TEE-WHT",
+    "name": "Minimalist Graphic Tee (White)",
     "categoryName": "T-Shirts",
-    "description": "An off-duty essential crewneck t-shirt featuring a subtle minimalist chest graphic print. Soft-washed for comfort.",
+    "description": "An off-duty essential white crewneck t-shirt featuring a subtle minimalist chest graphic print. Soft-washed for comfort.",
     "images": [
       "images/products/tee_white.jpg",
-      "images/products/tee_black.jpg",
+      "images/products/tee_white.jpg",
       "images/products/tee_white.jpg"
     ],
-    "attributes": {"Size": ["S", "M", "L", "XL"], "Color": ["White", "Black"], "Fabric": ["100% Combed Cotton"]},
+    "attributes": {"Size": ["S", "M", "L", "XL"], "Color": ["White"], "Fabric": ["100% Combed Cotton"]},
     "featured": false,
     "newArrival": true,
     "createdDate": "2026-08-22",
@@ -37,16 +54,33 @@
     "originalPrice": 799
   },
   {
-    "id": 203,
-    "productCode": "DEN-001",
-    "name": "Super-Stretch Slim Jeans",
-    "categoryName": "Jeans",
-    "description": "Crafted from premium stretch-cotton denim, these slim-fit jeans provide exceptional flexibility and comfort all day long.",
+    "id": 204,
+    "productCode": "TEE-BLK",
+    "name": "Minimalist Graphic Tee (Black)",
+    "categoryName": "T-Shirts",
+    "description": "An off-duty essential black crewneck t-shirt featuring a subtle minimalist chest graphic print. Soft-washed for comfort.",
     "images": [
-      "images/products/jeans_blue.jpg",
-      "images/products/jeans_black.jpg"
+      "images/products/tee_black.jpg",
+      "images/products/tee_black.jpg"
     ],
-    "attributes": {"Waist": ["30", "32", "34", "36"], "Wash": ["Indigo Blue", "Charcoal Grey"], "Fabric": ["98% Cotton, 2% Elastane"]},
+    "attributes": {"Size": ["S", "M", "L", "XL"], "Color": ["Black"], "Fabric": ["100% Combed Cotton"]},
+    "featured": false,
+    "newArrival": true,
+    "createdDate": "2026-08-22",
+    "sellerId": "palrix-fashion",
+    "price": 499,
+    "originalPrice": 799
+  },
+  {
+    "id": 205,
+    "productCode": "DEN-BLU",
+    "name": "Super-Stretch Slim Jeans (Blue)",
+    "categoryName": "Jeans",
+    "description": "Crafted from premium stretch-cotton denim, these slim-fit blue jeans provide exceptional flexibility and comfort all day long.",
+    "images": [
+      "images/products/jeans_blue.jpg"
+    ],
+    "attributes": {"Waist": ["30", "32", "34", "36"], "Wash": ["Indigo Blue"], "Fabric": ["98% Cotton, 2% Elastane"]},
     "featured": true,
     "newArrival": true,
     "createdDate": "2026-08-21",
@@ -55,16 +89,33 @@
     "originalPrice": 2299
   },
   {
-    "id": 204,
-    "productCode": "CRG-001",
-    "name": "Utility Cargo Joggers",
-    "categoryName": "Cargo Pants",
-    "description": "A modern take on cargo pants. Features an elasticated waist with drawstring, utility side pockets, and cuffed ankles.",
+    "id": 206,
+    "productCode": "DEN-BLK",
+    "name": "Super-Stretch Slim Jeans (Black)",
+    "categoryName": "Jeans",
+    "description": "Crafted from premium stretch-cotton denim, these slim-fit charcoal black jeans provide exceptional flexibility and comfort all day long.",
     "images": [
-      "images/products/cargo_khaki.jpg",
-      "images/products/cargo_olive.jpg"
+      "images/products/jeans_black.jpg",
+      "images/products/jeans_black.jpg"
     ],
-    "attributes": {"Size": ["M", "L", "XL"], "Color": ["Khaki Brown", "Olive Green"], "Fabric": ["Twill Weave Cotton"]},
+    "attributes": {"Waist": ["30", "32", "34", "36"], "Wash": ["Charcoal Grey"], "Fabric": ["98% Cotton, 2% Elastane"]},
+    "featured": true,
+    "newArrival": true,
+    "createdDate": "2026-08-21",
+    "sellerId": "palrix-fashion",
+    "price": 1499,
+    "originalPrice": 2299
+  },
+  {
+    "id": 207,
+    "productCode": "CRG-KHK",
+    "name": "Utility Cargo Joggers (Khaki)",
+    "categoryName": "Cargo Pants",
+    "description": "A modern take on cargo pants. Features an elasticated waist with drawstring, utility side pockets, and cuffed ankles in khaki brown.",
+    "images": [
+      "images/products/cargo_khaki.jpg"
+    ],
+    "attributes": {"Size": ["M", "L", "XL"], "Color": ["Khaki Brown"], "Fabric": ["Twill Weave Cotton"]},
     "featured": true,
     "newArrival": true,
     "createdDate": "2026-08-23",
@@ -73,17 +124,52 @@
     "originalPrice": 1899
   },
   {
-    "id": 205,
-    "productCode": "TRK-001",
-    "name": "Comfort Fleece Track Pants",
+    "id": 208,
+    "productCode": "CRG-OLV",
+    "name": "Utility Cargo Joggers (Olive)",
+    "categoryName": "Cargo Pants",
+    "description": "A modern take on cargo pants. Features an elasticated waist with drawstring, utility side pockets, and cuffed ankles in olive green.",
+    "images": [
+      "images/products/cargo_olive.jpg",
+      "images/products/cargo_olive.jpg"
+    ],
+    "attributes": {"Size": ["M", "L", "XL"], "Color": ["Olive Green"], "Fabric": ["Twill Weave Cotton"]},
+    "featured": true,
+    "newArrival": true,
+    "createdDate": "2026-08-23",
+    "sellerId": "palrix-fashion",
+    "price": 1299,
+    "originalPrice": 1899
+  },
+  {
+    "id": 209,
+    "productCode": "TRK-GRY",
+    "name": "Comfort Fleece Track Pants (Grey)",
     "categoryName": "Track Pants",
-    "description": "Premium athletic sweatpants with side stripe details, secure pockets, and a comfortable drawstring elastic waist.",
+    "description": "Premium athletic sweatpants in heather grey with side stripe details, secure pockets, and a comfortable drawstring elastic waist.",
     "images": [
       "images/products/trackpants_grey.jpg",
-      "images/products/trackpants_black.jpg",
+      "images/products/trackpants_grey.jpg",
       "images/products/trackpants_grey.jpg"
     ],
-    "attributes": {"Size": ["S", "M", "L", "XL"], "Color": ["Heather Grey", "Active Black"], "Fabric": ["Fleece Cotton Polyester"]},
+    "attributes": {"Size": ["S", "M", "L", "XL"], "Color": ["Heather Grey"], "Fabric": ["Fleece Cotton Polyester"]},
+    "featured": true,
+    "newArrival": false,
+    "createdDate": "2026-08-24",
+    "sellerId": "palrix-fashion",
+    "price": 999,
+    "originalPrice": 1499
+  },
+  {
+    "id": 210,
+    "productCode": "TRK-BLK",
+    "name": "Comfort Fleece Track Pants (Black)",
+    "categoryName": "Track Pants",
+    "description": "Premium athletic sweatpants in active black with side stripe details, secure pockets, and a comfortable drawstring elastic waist.",
+    "images": [
+      "images/products/trackpants_black.jpg"
+    ],
+    "attributes": {"Size": ["S", "M", "L", "XL"], "Color": ["Active Black"], "Fabric": ["Fleece Cotton Polyester"]},
     "featured": true,
     "newArrival": false,
     "createdDate": "2026-08-24",
