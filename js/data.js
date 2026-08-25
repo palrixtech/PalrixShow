@@ -172,7 +172,8 @@
    */
   async function getCSVText() {
     try {
-      const response = await fetch("data/products.csv", { cache: "no-cache" });
+      const ts = new Date().getTime();
+      const response = await fetch("data/products.csv?t=" + ts, { cache: "no-cache" });
       if (response.ok) {
         return await response.text();
       }

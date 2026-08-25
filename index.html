@@ -52,9 +52,26 @@
 
   </div>
 
-  <!-- Scripts -->
-  <script src="js/data.js"></script>
-  <script src="js/actions.js"></script>
-  <script src="js/showcase.js"></script>
+  <!-- Dynamic Cache-Busting Script Loader -->
+  <script>
+    (function() {
+      const ts = new Date().getTime();
+      const scripts = [
+        'js/data.js',
+        'js/actions.js',
+        'js/showcase.js'
+      ];
+      
+      function loadNext(idx) {
+        if (idx >= scripts.length) return;
+        const script = document.createElement('script');
+        script.src = scripts[idx] + '?t=' + ts;
+        script.onload = () => loadNext(idx + 1);
+        document.body.appendChild(script);
+      }
+      
+      loadNext(0);
+    })();
+  </script>
 </body>
 </html>
