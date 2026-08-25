@@ -10,6 +10,10 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
+  <!-- Force browser to never cache this page -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
 </head>
 <body class="showcase-body">
 
@@ -51,6 +55,17 @@
     <div class="toast-msg" id="shareToast">Link copied to clipboard</div>
 
   </div>
+
+  <!-- Service Worker — ensures fresh content on every refresh -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => {
+          // Force update check on every page load
+          reg.update();
+        });
+    }
+  </script>
 
   <!-- Dynamic Cache-Busting Script Loader -->
   <script>
