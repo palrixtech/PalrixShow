@@ -138,8 +138,8 @@
       }
       
       const prod = productsMap[id];
-      const color = row.colorName || "Default";
-      const colorCode = row.colorCode || "#ffffff";
+      const color = (row.colorName && row.colorName.trim()) ? row.colorName.trim() : "Default";
+      const colorCode = (row.colorCode && row.colorCode.trim()) ? row.colorCode.trim() : "#ffffff";
       const image = row.imagePath || "";
       
       if (image) {

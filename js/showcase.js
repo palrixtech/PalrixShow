@@ -219,10 +219,10 @@
     }
 
     // Floating Badge (e.g. New Arrival, Limited Stock)
-    if (product.badge) {
+    if (product.badge && product.badge.trim() !== "") {
       const badge = document.createElement("span");
-      badge.className = `info-badge ${product.badgeClass || 'badge-new'}`;
-      badge.textContent = product.badge;
+      badge.className = `info-badge ${product.badgeClass && product.badgeClass.trim() ? product.badgeClass.trim() : 'badge-new'}`;
+      badge.textContent = product.badge.trim();
       infoOverlay.append(badge);
     }
 
