@@ -385,13 +385,16 @@
 
         const blurBg = document.createElement("div");
         blurBg.className = "media-blur-bg";
-        blurBg.style.backgroundImage = `url('${imgUrl}')`;
 
         const img = document.createElement("img");
         img.className = "media-content";
-        img.src = imgUrl;
         img.alt = `${product.name} - ${variant.colorName}`;
         img.loading = index < 2 && sIdx === 0 ? "eager" : "lazy";
+
+        // Try to load image with automatic extension fallbacks
+        setFallbackImageSrc(img, imgUrl, (resolvedUrl) => {
+          blurBg.style.backgroundImage = `url('${resolvedUrl}')`;
+        });
 
         slide.append(blurBg, img);
         slider.append(slide);
@@ -678,6 +681,48 @@
         setActiveCategory(filter);
       });
     });
+  }
+
+  /**
+   * Safe image source loader that automatically tries alternative extensions (jpg, jpeg, png, etc.) on load failure
+   */
+  function setFallbackImageSrc(imgElement, originalUrl, onSuccess) {
+    const extensions = ['.jpg', '.jpeg', '.png', '.webp', '.JPG', '.JPEG', '.PNG', '.WEBP'];
+    
+    const lastDotIndex = originalUrl.lastIndexOf('.');
+    if (lastDotIndex === -1) {
+      imgElement.src = originalUrl;
+      if (onSuccess) onSuccess(originalUrl);
+      return;
+    }
+    
+    const basePath = originalUrl.substring(0, lastDotIndex);
+    const currentExt = originalUrl.substring(lastDotIndex);
+    
+    // Sort extensions so that the specified extension is tried first, then others
+    const fallbackExts = extensions.filter(ext => ext.toLowerCase() !== currentExt.toLowerCase());
+    const uniqueExts = [currentExt, ...fallbackExts];
+    
+    let attemptIndex = 0;
+    
+    imgElement.onload = () => {
+      imgElement.onload = null;
+      imgElement.onerror = null;
+      if (onSuccess) onSuccess(imgElement.src);
+    };
+
+    imgElement.onerror = () => {
+      attemptIndex++;
+      if (attemptIndex < uniqueExts.length) {
+        imgElement.src = basePath + uniqueExts[attemptIndex];
+      } else {
+        imgElement.onload = null;
+        imgElement.onerror = null;
+        console.warn("All image fallbacks failed for:", originalUrl);
+      }
+    };
+    
+    imgElement.src = originalUrl;
   }
 
   /**
