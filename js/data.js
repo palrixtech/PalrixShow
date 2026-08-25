@@ -41,41 +41,68 @@
    * Helper to parse CSV data text, taking care of quoted values
    */
   function parseCSV(text) {
-    const lines = text.split(/\r?\n/);
-    if (lines.length < 2) return [];
-    
-    const headers = lines[0].split(",").map(h => h.trim());
     const rows = [];
+    let inQuotes = false;
+    let currentValue = "";
+    let currentRow = [];
     
-    for (let i = 1; i < lines.length; i++) {
-      const line = lines[i].trim();
-      if (!line) continue;
+    // Normalize newlines
+    const cleanedText = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+    
+    for (let i = 0; i < cleanedText.length; i++) {
+      const char = cleanedText[i];
+      const nextChar = cleanedText[i + 1];
       
-      const values = [];
-      let inQuotes = false;
-      let currentValue = "";
-      
-      for (let j = 0; j < line.length; j++) {
-        const char = line[j];
-        if (char === '"') {
-          inQuotes = !inQuotes;
-        } else if (char === ',' && !inQuotes) {
-          values.push(currentValue.trim());
-          currentValue = "";
+      if (char === '"') {
+        if (!inQuotes) {
+          // Double quote only starts a quoted field if it is at the beginning of the field
+          if (currentValue.trim() === "") {
+            inQuotes = true;
+          } else {
+            currentValue += '"';
+          }
         } else {
-          currentValue += char;
+          // Inside quotes
+          if (nextChar === '"') {
+            currentValue += '"';
+            i++; // skip next quote
+          } else {
+            inQuotes = false;
+          }
         }
+      } else if (char === ',' && !inQuotes) {
+        currentRow.push(currentValue.trim());
+        currentValue = "";
+      } else if (char === '\n' && !inQuotes) {
+        currentRow.push(currentValue.trim());
+        rows.push(currentRow);
+        currentRow = [];
+        currentValue = "";
+      } else {
+        currentValue += char;
       }
-      values.push(currentValue.trim());
-      
+    }
+    // Push last row if text doesn't end with newline
+    if (currentRow.length > 0 || currentValue) {
+      currentRow.push(currentValue.trim());
+      rows.push(currentRow);
+    }
+    
+    if (rows.length < 2) return [];
+    
+    const headers = rows[0].map(h => h.trim());
+    const mappedRows = [];
+    
+    for (let i = 1; i < rows.length; i++) {
+      const values = rows[i];
       const row = {};
       headers.forEach((header, idx) => {
         row[header] = values[idx] !== undefined ? values[idx] : "";
       });
-      rows.push(row);
+      mappedRows.push(row);
     }
     
-    return rows;
+    return mappedRows;
   }
 
   /**
