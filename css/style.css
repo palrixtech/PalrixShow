@@ -275,9 +275,39 @@ body.showcase-body {
 .info-title,
 .info-price-row,
 .info-description,
-.info-sku {
-  padding-left: 16px;
-  padding-right: 72px; /* Right padding cleared for action bar */
+/* Size chip row */
+.info-size-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 72px 0 16px;
+}
+
+.info-size-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 2px;
+}
+
+.size-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  border: 1.5px solid rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .info-category {
@@ -338,11 +368,7 @@ body.showcase-body {
   display: none;
 }
 
-.info-sku {
-  font-size: 0.75rem;
-  color: #777;
-  font-family: monospace;
-}
+
 
 /* Action Bar Overlay on Right */
 .action-bar {

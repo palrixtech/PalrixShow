@@ -263,11 +263,24 @@
 
     infoOverlay.append(category, title, priceRow, desc);
 
-    if (product.productCode) {
-      const sku = document.createElement("div");
-      sku.className = "info-sku";
-      sku.textContent = `SKU: ${product.productCode}`;
-      infoOverlay.append(sku);
+    // Size Chips — show only if sizes are defined
+    if (product.sizes && product.sizes.length > 0) {
+      const sizeRow = document.createElement("div");
+      sizeRow.className = "info-size-row";
+
+      const sizeLabel = document.createElement("span");
+      sizeLabel.className = "info-size-label";
+      sizeLabel.textContent = "Size:";
+      sizeRow.append(sizeLabel);
+
+      product.sizes.forEach(size => {
+        const chip = document.createElement("span");
+        chip.className = "size-chip";
+        chip.textContent = size;
+        sizeRow.append(chip);
+      });
+
+      infoOverlay.append(sizeRow);
     }
 
     item.append(infoOverlay);

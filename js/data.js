@@ -143,6 +143,8 @@
           badge: (row.badge || "").trim(),
           badgeClass: (row.badgeClass || "").trim(),
           sellerId: (row.sellerId || "palrix-fashion").trim(),
+          // Parse sizes: "S,M,L,XL" → ["S","M","L","XL"], blank → []
+          sizes: (row.sizes || "").split(",").map(s => s.trim()).filter(Boolean),
           variantsMap: {}
         };
       }

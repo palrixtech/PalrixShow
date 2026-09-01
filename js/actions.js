@@ -120,16 +120,35 @@
    */
   function openWhatsAppEnquiry(product, seller, variantIndex, slideIndex) {
     const phoneClean = String(seller.whatsappNumber || seller.phone).replace(/\D/g, "");
-    
-    let text = `Hi, I'm interested in ${product.name}`;
+
+    // Get selected variant info
+    const variants = product.variants || [];
+    const selectedVariant = variants[variantIndex] || variants[0];
+    const colorName = selectedVariant ? selectedVariant.colorName : "";
+
+    let text = `Hi, I'm interested in *${product.name}*`;
     if (product.productCode) {
-      text += ` (${product.productCode})`;
+      text += ` (Code: ${product.productCode})`;
     }
-    text += `. Is it available?`;
-    
-    // Also append the share link for clarity so the seller knows exactly which product/color/slide it is
+    text += `.`;
+
+    if (colorName && colorName !== "Default") {
+      text += `\n🎨 Color: ${colorName}`;
+    }
+
+    if (product.sizes && product.sizes.length > 0) {
+      text += `\n📏 Available Sizes: ${product.sizes.join(", ")}`;
+    }
+
+    if (product.price) {
+      text += `\n💰 Price: ₹${product.price.toLocaleString("en-IN")}`;
+    }
+
+    text += `\n\nIs it available? Please confirm.`;
+
+    // Append share link so seller knows exact product/color/slide
     const productUrl = getProductShareUrl(seller.slug, product.id, variantIndex, slideIndex);
-    text += `\nLink: ${productUrl}`;
+    text += `\n🔗 ${productUrl}`;
 
     const waUrl = `https://wa.me/${phoneClean}?text=${encodeURIComponent(text)}`;
     window.open(waUrl, "_blank", "noopener,noreferrer");
